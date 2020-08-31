@@ -11,16 +11,23 @@ const app = express();
 // Configurar cors
 app.use(cors());
 
+// Libreria para manejar pas peticiones post (recibir formulario Fontend)
+const bodyParser = require('body-parser');
+
+// parse application/x - www - form - urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json())
+
+// Recibir formulario en formato json()
+app.use(express.json());
+
 dbConnection();
 
 // Rutas
-app.get('/', (req, res) => {
+app.use('/api/usuarios', require('./rutas/usuarios'));
+app.use('/api/login', require('./rutas/auth'));
 
-    res.status(400).json({
-        ok: true,
-        msg: 'Hola Mundo'
-    })
-})
 
 
 

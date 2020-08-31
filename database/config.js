@@ -8,7 +8,8 @@ const dbConnection = async() => {
         await mongoose.connect(path, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useCreateIndex: true
+            useCreateIndex: true,
+            useFindAndModify: false
         });
 
         console.log('Base de datos online..');
