@@ -4,12 +4,26 @@ const bcrypt = require('bcrypt');
 
 const getUsuarios = async(req, res) => {
 
-    const usuarios = await Usuario.find({}, 'nombre email img role google');
+    let desde = req.query.desde || 0;
+    desde = Number(desde);
+    let limite = req.query.limite || 5;
+    limite = Number(limite);
+
+
+    const [usuarios, total] = await Promise.all([
+        Usuario.find({}, 'nombre email img role google')
+        .skip(desde)
+        .limit(limite),
+
+        Usuario.countDocuments()
+    ])
+
 
     res.json({
         ok: true,
         usuarios,
-        uid: req.uid
+        uid: req.uid,
+        total
     })
 }
 
@@ -39,8 +53,7 @@ const crearUsuario = async(req, res = response) => {
 
         res.status(200).json({
             ok: true,
-            usuario,
-            // token
+            usuario
         })
 
     } catch {
@@ -56,7 +69,7 @@ const actualizarUsuario = async(req, res = response) => {
 
     // TODO Validar token y comprobar si es el usuario correcto
 
-    const uid = req.params.id
+    const uid = req.params.id;
 
     try {
 
@@ -121,6 +134,7 @@ const eliminarUsuario = async(req, res = response) => {
         }
 
         await Usuario.findByIdAndRemove(id);
+
 
         res.status(200).json({
             ok: true,

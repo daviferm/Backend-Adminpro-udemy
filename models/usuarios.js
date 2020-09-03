@@ -26,7 +26,8 @@ const usuarioSchema = new Schema({
     role: {
         type: String,
         required: true,
-        default: 'USER_ROLE'
+        default: 'USER_ROLE',
+        anum: rolesValidos
     },
     google: {
         type: Boolean,
@@ -47,4 +48,4 @@ usuarioSchema.method('toJSON', function() {
 
 usuarioSchema.plugin(uniqueValidator, { menssage: '{PATH} debe de ser único!' });
 
-module.exports = model('Usuarios', usuarioSchema);
+module.exports = model('Usuario', usuarioSchema);
