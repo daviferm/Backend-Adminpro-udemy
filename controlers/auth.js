@@ -2,7 +2,7 @@ const { response } = require('express');
 const Usuario = require('../models/usuarios');
 const bcrypt = require('bcrypt');
 const { generarJWT } = require('../hellpers/jwt');
-
+const { googleVerify } = require('../hellpers/google-verify');
 
 const login = async(req, res = response) => {
 
@@ -47,11 +47,64 @@ const login = async(req, res = response) => {
         })
     }
 
-
-
 };
+
+const googleSignIn = async(req, res = response) => {
+
+    const googleToken = req.body.token;
+
+    try {
+
+        const { name, email, picture } = await googleVerify(googleToken);
+
+        // Comprobar si el usuario esta registrado en la base de datos
+        const usuarioDB = await Usuario.findOne({ email });
+        let usuario;
+        let messenge;
+
+        if (!usuarioDB) {
+            // Si no existe el usuario en la base de datos
+            usuario = new Usuario({
+                google: true,
+                nombre: name,
+                email,
+                img: picture,
+                password: ':)'
+            })
+        } else {
+            // Si el usuario existe en la base de datos
+            usuario = usuarioDB;
+        }
+        let token;
+
+        // Guardamos el usuario en la base de datos y generamos el token JWT
+        await Promise.all([
+            usuario = await usuario.save(),
+            // Generar el token
+            token = await generarJWT(usuario._id)
+        ])
+
+        res.status(200).json({
+            ok: true,
+            token
+        });
+
+
+    } catch (error) {
+        res.status(401).json({
+            ok: false,
+            msg: 'El token de Google no es correcto!!',
+            error
+        })
+
+    }
+
+
+
+}
 
 
 module.exports = {
-    login
+    login,
+    googleSignIn
 }
