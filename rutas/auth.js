@@ -4,8 +4,9 @@
 const { Router } = require('express');
 // libreria de express para hacer validaciones
 const { check } = require('express-validator');
-const { login, googleSignIn } = require('../controlers/auth');
+const { login, googleSignIn, renewToken } = require('../controlers/auth');
 const { validarCampos } = require('../middelwares/validar-campos');
+const { verificaToken } = require('../middelwares/autentication');
 
 const router = Router();
 
@@ -21,6 +22,10 @@ router.post('/google', [
         validarCampos
     ],
     googleSignIn
+);
+router.get('/renew',
+    verificaToken,
+    renewToken
 );
 
 

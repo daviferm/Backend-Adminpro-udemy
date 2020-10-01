@@ -25,6 +25,31 @@ const getMedicos = async(req, res = response) => {
             msg: 'Error inesperado'
         })
     }
+}
+
+const obtenerMedicoPorId = async(rep, res = response) => {
+
+
+    try {
+
+        const id = rep.params.id;
+
+        const medico = await Medico.findById(id)
+            .populate('usuario', 'nombre img')
+            .populate('hospital', 'nombre img')
+
+        return res.status(200).json({
+            ok: true,
+            medico
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({
+            ok: false,
+            msg: 'Error inesperado'
+        })
+    }
 
 }
 const crearMedicos = async(req, res = response) => {
@@ -111,5 +136,6 @@ module.exports = {
     getMedicos,
     crearMedicos,
     actualizarMedicos,
-    borrarMedicos
+    borrarMedicos,
+    obtenerMedicoPorId
 }

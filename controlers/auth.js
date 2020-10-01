@@ -28,16 +28,12 @@ const login = async(req, res = response) => {
         }
 
         // Generar el token
-        const token = await generarJWT(usuarioDB._id)
-
+        const token = await generarJWT(usuarioDB._id);
 
         res.status(200).json({
             ok: true,
-            usuarioDB: usuarioDB,
             token
         });
-
-
 
     } catch (error) {
         console.log(error);
@@ -60,7 +56,6 @@ const googleSignIn = async(req, res = response) => {
         // Comprobar si el usuario esta registrado en la base de datos
         const usuarioDB = await Usuario.findOne({ email });
         let usuario;
-        let messenge;
 
         if (!usuarioDB) {
             // Si no existe el usuario en la base de datos
@@ -98,13 +93,28 @@ const googleSignIn = async(req, res = response) => {
         })
 
     }
+}
 
+const renewToken = async(req, res = response) => {
 
+    const uid = req.uid;
+    // Generar el token
+    token = await generarJWT(uid);
+
+    // Obtener el usuario
+    const usuario = await Usuario.findById(uid);
+
+    res.json({
+        ok: true,
+        token,
+        usuario
+    })
 
 }
 
 
 module.exports = {
     login,
-    googleSignIn
+    googleSignIn,
+    renewToken
 }

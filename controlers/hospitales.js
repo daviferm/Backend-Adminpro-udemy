@@ -7,7 +7,7 @@ const getHospitales = async(req, res = response) => {
     let desde = req.query.desde || 0;
     desde = Number(desde);
 
-    let limite = req.query.limite || 10;
+    let limite = req.query.limite || 5;
     limite = Number(limite);
 
     try {
@@ -16,7 +16,7 @@ const getHospitales = async(req, res = response) => {
             .skip(desde)
             .limit(limite)
 
-        const conteo = await Hospital.countDocument();
+        const conteo = await Hospital.countDocuments();
         res.status(200).json({
             ok: true,
             hospitales,
@@ -25,6 +25,28 @@ const getHospitales = async(req, res = response) => {
 
     } catch (error) {
 
+        console.log(error);
+        res.status(404).json({
+            ok: false,
+            msg: 'Error inesperado'
+        })
+    }
+}
+
+const getOneHospital = async(req, res = response) => {
+
+    try {
+
+        const id = req.params.id;
+
+        const hospital = await Hospital.findById(id);
+
+        res.status(200).json({
+            ok: true,
+            hospital
+        })
+
+    } catch (error) {
         console.log(error);
         res.status(404).json({
             ok: false,
@@ -101,7 +123,7 @@ const borrarHospitales = async(req, res = response) => {
 
     try {
 
-        const hospitalDB = await Medico.findById(uid);
+        const hospitalDB = await Hospital.findById(uid);
         if (!hospitalDB) {
             return res.status(401).json({
                 ok: false,
@@ -131,5 +153,6 @@ module.exports = {
     getHospitales,
     crearHospitales,
     actualizarHospitales,
-    borrarHospitales
+    borrarHospitales,
+    getOneHospital
 }

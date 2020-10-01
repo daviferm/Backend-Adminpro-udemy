@@ -8,9 +8,7 @@ const googleVerify = async(token) => {
         audience: process.env.GOOGLE_ID,
     });
     const payload = ticket.getPayload();
-    const userid = payload['sub'];
-    // If request specified a G Suite domain:
-    // const domain = payload['hd'];
+
     const { name, email, picture } = payload;
 
     return { name, email, picture };

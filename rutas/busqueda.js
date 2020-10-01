@@ -14,6 +14,4 @@ router.get('/coleccion/:tabla/:termino', verificaToken, getDocumentosColecion);
 
 
 
-
-
 module.exports = router;

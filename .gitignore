@@ -3,4 +3,16 @@ node_modules/
 
 node_modules
 
-package-lock.json
+package-lock.jsons
+
+uploads/hospitales/**.jpg
+uploads/hospitales/**.png
+uploads/hospitales/**.gig
+
+uploads/medicos/**.jpg
+uploads/medicos/**.png
+uploads/medicos/**.gig
+
+uploads/usuarios/**.jpg
+uploads/usuarios/**.png
+uploads/usuarios/**.gig

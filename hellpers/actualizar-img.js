@@ -54,12 +54,12 @@ const actualizarRegistro = (registro, id, res, archivo, nombreArchivo, tipo) => 
         }
 
         registroDB.img = nombreArchivo;
-        const registroActualizado = await registroDB.save();
+        await registroDB.save();
 
         res.json({
             ok: true,
             msg: `Imagen subida (${tipo})`,
-            registro: registroActualizado
+            nombreImg: nombreArchivo
         })
     });
 }

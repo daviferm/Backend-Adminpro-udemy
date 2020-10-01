@@ -1,6 +1,7 @@
 const { response } = require('express');
 const Usuario = require('../models/usuarios');
 const bcrypt = require('bcrypt');
+const { generarJWT } = require('../hellpers/jwt');
 
 const getUsuarios = async(req, res) => {
 
@@ -18,11 +19,9 @@ const getUsuarios = async(req, res) => {
         Usuario.countDocuments()
     ])
 
-
     res.json({
         ok: true,
         usuarios,
-        uid: req.uid,
         total
     })
 }
@@ -38,7 +37,7 @@ const crearUsuario = async(req, res = response) => {
         if (existeEmail) {
             return res.status(400).json({
                 ok: false,
-                msg: 'El correo ya existe!!'
+                msg: 'El correo ya está registrado!'
             })
         }
 
@@ -51,8 +50,12 @@ const crearUsuario = async(req, res = response) => {
         // Guardar usuario
         await usuario.save();
 
+        // Generar el token
+        const token = await generarJWT(usuario.uid);
+
         res.status(200).json({
             ok: true,
+            token,
             usuario
         })
 
@@ -97,8 +100,14 @@ const actualizarUsuario = async(req, res = response) => {
         }
         // delete campos.password;
         // delete campos.google;
-
-        campos.email = email;
+        if (!usuarioDB.google) {
+            campos.email = email;
+        } else if (usuarioDB.email !== email) {
+            return res.status(400).json({
+                ok: false,
+                msg: 'Usuarios de google no pueden modificar el correo!'
+            })
+        }
 
         // Actualizar
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
@@ -150,8 +159,6 @@ const eliminarUsuario = async(req, res = response) => {
             msg: 'Error inesperado'
         })
     }
-
-
 }
 
 module.exports = {

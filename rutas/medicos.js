@@ -3,7 +3,7 @@
 //=================================================
 
 const { Router } = require('express');
-const { getMedicos, crearMedicos, borrarMedicos, actualizarMedicos } = require('../controlers/medicos');
+const { getMedicos, crearMedicos, borrarMedicos, actualizarMedicos, obtenerMedicoPorId } = require('../controlers/medicos');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middelwares/validar-campos');
 const { verificaToken } = require('../middelwares/autentication');
@@ -12,6 +12,7 @@ const router = Router();
 
 
 router.get('/', verificaToken, getMedicos);
+router.get('/:id', verificaToken, obtenerMedicoPorId);
 
 router.post('/', [
         verificaToken,

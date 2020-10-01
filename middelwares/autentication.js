@@ -5,7 +5,7 @@ const verificaToken = (req, res, next) => {
 
     // Leer el token del encabezado
     // const token = req.get('token');
-    const token = req.header('token');
+    const token = req.header('x-token');
 
     if (!token) {
         return res.status(401).json({

@@ -55,30 +55,9 @@ const retornaImagen = (req, res = response) => {
     if (fs.existsSync(pathImagen)) {
         res.sendFile(pathImagen);
     } else {
-        var pathNoImage = path.resolve(__dirname, '../assets/no-img.jpg');
+        var pathNoImage = path.resolve(__dirname, '../uploads/no-img.jpg');
         res.sendFile(pathNoImage);
     }
-    // switch (tipo) {
-    //     case 'usuarios':
-    //         const imagen = cargarImagenPorTipo(Usuario, id, res, patchImg);
-    //         res.sendFile(imagen);
-
-    //         break;
-    //     case 'hospitales':
-    //         cargarImagenPorTipo(Hospital, id, res, patchImg);
-
-    //         break;
-    //     case 'medicos':
-    //         cargarImagenPorTipo(Medico, id, res, patchImg);
-
-    //         break;
-    //     default:
-    //         return res.status(400).json({
-    //             ok: false,
-    //             msg: 'Los tipos válidos son: usuarios, hospitales y medicos!!'
-    //         })
-    // }
-
 }
 
 

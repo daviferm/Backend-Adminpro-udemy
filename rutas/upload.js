@@ -12,7 +12,7 @@ const router = Router();
 router.use(fileUpload());
 
 router.put('/:tabla/:id', verificaToken, subirImagen);
-router.get('/:tabla/:img', verificaToken, retornaImagen);
+router.get('/:tabla/:img', retornaImagen);
 
 
 module.exports = router;
