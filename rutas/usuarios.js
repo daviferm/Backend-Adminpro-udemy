@@ -6,12 +6,12 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const { getUsuarios, crearUsuario, actualizarUsuario, eliminarUsuario } = require('../controlers/usuarios');
 const { validarCampos } = require('../middelwares/validar-campos');
-const { verificaToken } = require('../middelwares/autentication');
+const { verificaToken, validarADMIN_ROLE, validarADMIN_ROLEoMismoUsuario } = require('../middelwares/autentication');
 
 const router = Router();
 
 
-router.get('/', verificaToken, getUsuarios);
+router.get('/', [verificaToken, validarADMIN_ROLE], getUsuarios);
 router.post('/', [
         check('nombre', 'El nombre es obligatorio!').not().isEmpty(),
         check('password', 'La contraseña es obligatoria!').not().isEmpty(),
@@ -22,6 +22,7 @@ router.post('/', [
 );
 router.put('/:id', [
         verificaToken,
+        validarADMIN_ROLEoMismoUsuario,
         check('nombre', 'El nombre es obligatorio!').not().isEmpty(),
         check('email', 'El correo es obligatorio!').isEmail(),
         check('role', 'El role es obligatorio!').not().isEmail(),
@@ -29,8 +30,7 @@ router.put('/:id', [
     ],
     actualizarUsuario
 );
-router.delete('/:id',
-    verificaToken,
+router.delete('/:id', [verificaToken, validarADMIN_ROLE],
     eliminarUsuario
 );
 

@@ -83,7 +83,9 @@ const actualizarMedicos = async(req, res = response) => {
 
         const uid = req.params.id;
 
-        const medicoDB = await Medico.findByIdAndUpdate(uid, req.body, { new: true });
+        const medicoDB = await Medico.findByIdAndUpdate(uid, req.body, { new: true })
+            .populate('usuario', 'nombre img')
+            .populate('hospital', 'nombre img')
 
         res.status(200).json({
             ok: true,

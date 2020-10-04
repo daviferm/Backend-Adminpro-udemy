@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const { generarJWT } = require('../hellpers/jwt');
 const { googleVerify } = require('../hellpers/google-verify');
 
+const { getMenuFrontend } = require('../hellpers/menu-frontend');
+
 const login = async(req, res = response) => {
 
     const { email, password } = req.body;
@@ -32,7 +34,8 @@ const login = async(req, res = response) => {
 
         res.status(200).json({
             ok: true,
-            token
+            token,
+            menu: getMenuFrontend(usuarioDB.role)
         });
 
     } catch (error) {
@@ -81,7 +84,8 @@ const googleSignIn = async(req, res = response) => {
 
         res.status(200).json({
             ok: true,
-            token
+            token,
+            menu: getMenuFrontend(usuario.role)
         });
 
 
@@ -107,7 +111,8 @@ const renewToken = async(req, res = response) => {
     res.json({
         ok: true,
         token,
-        usuario
+        usuario,
+        menu: getMenuFrontend(usuario.role)
     })
 
 }
