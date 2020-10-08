@@ -3,6 +3,7 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 
 const { dbConnection } = require('./database/config');
@@ -37,7 +38,10 @@ app.use('/api/todo', require('./rutas/busqueda'));
 app.use('/api/login', require('./rutas/auth'));
 app.use('/api/upload', require('./rutas/upload'));
 
-
+// Lo último
+app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public/index.html'));
+})
 
 
 
